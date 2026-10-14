@@ -13,7 +13,7 @@ import { StudentDetailModal } from './components/StudentDetailModal';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { GoogleAppsScriptModal } from './components/GoogleAppsScriptModal';
 import { UserManagement } from './components/UserManagement';
-import { LoginModal } from './components/LoginModal';
+import { LoginModal, LoginScreen } from './components/LoginModal';
 import { authService, UserAccount } from './services/authService';
 import { 
   Student, 
@@ -459,6 +459,20 @@ export default function App() {
       setIsSyncing(false);
     }
   };
+
+  // Protect Access: Strictly require login before accessing the application
+  if (!currentUser) {
+    return (
+      <LoginScreen
+        onLoginSuccess={(user) => {
+          setCurrentUser(user);
+          showNotification('success', `ចូលប្រព័ន្ធជោគជ័យ: ${user.adminName} (${user.role})`);
+        }}
+        language={language}
+        onLanguageToggle={handleLanguageToggle}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-900">
